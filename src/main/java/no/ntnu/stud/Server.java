@@ -21,40 +21,28 @@ public class Server {
    * <p>Waits for clients and listens to commands.
    */
   public void run(boolean multiThreaded) {
-    if (multiThreaded) {
-      runMultiThreaded();
-    } else {
-      runSingleThreaded();
-    }
-  }
-
-  private void runSingleThreaded() {
-    try {
-      while (true) {
-        ServerSocket server = new ServerSocket(this.port);
-        Socket client = server.accept();
-        handleClient(client);
-        server.close();
-      }
-    } catch (IOException e) {
-        System.out.println(e.getMessage());
-    }
-  }
-
-  private void runMultiThreaded(){
-   new Thread(() -> {
-     try {
+     ServerSocket server;
+     
+     try { // Create server socket
        ServerSocket server = new ServerSocket(this.port);
-       while (true) {
-         Socket client = server.accept();
-         handleClient(client);
-         server.close();
-       }
      } catch (IOException e) {
        System.out.println(e.getMessage());
+       return;
      }
-    }).start();
+
+     while (true) { // Handle clients
+       Socket client = server.accept();
+
+       if (multiThreaded) {
+           new Thread(() -> { handleClient(client); }).start();
+       } else {
+           handleClient(client);
+       }
+
+       server.close();
+     }
   }
+
 
   private void handleClient(Socket client) throws IOException {
     PrintWriter out = new PrintWriter(client.getOutputStream(), true);
