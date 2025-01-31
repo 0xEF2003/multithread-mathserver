@@ -27,7 +27,6 @@ public class Server {
        server = new ServerSocket(this.port);
        while (true) { // Handle clients
          Socket client = server.accept();
-
          if (multiThreaded) {
            new Thread(() -> {
                 try {
@@ -39,8 +38,6 @@ public class Server {
          } else {
            handleClient(client);
          }
-
-         server.close();
        }
      } catch (IOException e) {
        System.out.println(e.getMessage());
