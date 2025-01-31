@@ -24,23 +24,29 @@ public class Server {
      ServerSocket server;
      
      try { // Create server socket
-       ServerSocket server = new ServerSocket(this.port);
+       server = new ServerSocket(this.port);
+       while (true) { // Handle clients
+         Socket client = server.accept();
+
+         if (multiThreaded) {
+           new Thread(() -> {
+                try {
+                handleClient(client);
+                } catch (IOException e) {
+                System.out.println(e.getMessage());
+                }
+           }).start();
+         } else {
+           handleClient(client);
+         }
+
+         server.close();
+       }
      } catch (IOException e) {
        System.out.println(e.getMessage());
-       return;
      }
 
-     while (true) { // Handle clients
-       Socket client = server.accept();
 
-       if (multiThreaded) {
-           new Thread(() -> { handleClient(client); }).start();
-       } else {
-           handleClient(client);
-       }
-
-       server.close();
-     }
   }
 
 
