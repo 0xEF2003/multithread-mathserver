@@ -42,7 +42,10 @@ public class Server {
                 result = MathHandler.perform(request); 
                 message = String.valueOf(result);
             }
-            catch (Exception e) { message = "Bad math"; }
+            catch (Exception e) {
+              message = "Bad math";
+              System.out.println(e.getMessage());
+            }
 
             // Send result back to client
             out.println(message);

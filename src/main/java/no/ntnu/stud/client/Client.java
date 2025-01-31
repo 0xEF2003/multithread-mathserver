@@ -18,7 +18,7 @@ public class Client {
 
     public static void main(String[] args) {
         try {
-            Socket socket = new Socket("localhost", 1250);
+            Socket socket = new Socket("localhost", 1234);
             Client client = new Client(socket);
             client.start();
         } catch (IOException e) {

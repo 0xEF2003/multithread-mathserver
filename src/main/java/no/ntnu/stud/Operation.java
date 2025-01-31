@@ -4,7 +4,7 @@ public enum Operation {
     ADDITION("A"),
     SUBTRACTION("S"),
     DIVISION("D"),
-    MODULUS("M");
+    MULTIPLICATION("M");
     
     private final String value;
     private Operation(String value) {
@@ -18,7 +18,7 @@ public enum Operation {
     public static Operation fromValue(String value) {
         Operation operation = null;
         for (Operation type : Operation.values()) {
-            if (type.getValue() == value)
+            if (type.getValue().equals(value))
                 operation = type;
         }
         return operation;

@@ -20,8 +20,8 @@ public class Request {
 
         // Initialize fields
         this.operation = Operation.fromValue(operationPart);
-        this.one = Double.valueOf(onePart);
-        this.other = Double.valueOf(otherPart);
+        this.one = Double.parseDouble(onePart);
+        this.other = Double.parseDouble(otherPart);
     }
 
     public Operation getOperation() {
