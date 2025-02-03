@@ -9,6 +9,7 @@ import java.net.ServerSocket;
 
 public class Server {
   private int port;
+  private boolean running = true;
 
   public Server(int port) {
     this.port = port;
@@ -25,7 +26,7 @@ public class Server {
      
      try { // Create server socket
        server = new ServerSocket(this.port);
-       while (true) { // Handle clients
+       while (running) { // Handle clients
          Socket client = server.accept();
          if (multiThreaded) {
            new Thread(() -> {
@@ -46,12 +47,16 @@ public class Server {
 
   }
 
+    public void close() {
+        this.running = false;
+    }
+
 
   private void handleClient(Socket client) throws IOException {
     PrintWriter out = new PrintWriter(client.getOutputStream(), true);
     BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
     String line;
-    while((line = in.readLine()) != null) {
+    while((line = in.readLine()) != null && !line.equals("exit")) {
       Request request = null;
       double result = 0;
       String message = "";
@@ -72,6 +77,7 @@ public class Server {
       // Send result back to client
       out.println(message);
     }
+    close();
   }
 }
 

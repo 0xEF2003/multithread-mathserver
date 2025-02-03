@@ -16,8 +16,13 @@ public class Client {
       }
     }
 
-    public void run(String input) {
-        connectionHandler.sendUserInput(input);
+    public String run(String input) {
+        return connectionHandler.sendUserInput(input);
+    }
+
+    public void close() {
+      connectionHandler.sendUserInput("exit");
+      connectionHandler.close();
     }
 
     public static void main(String[] args) {

@@ -40,14 +40,10 @@ public void sendMessage(String message) {
     }
   }
 
-  public boolean sendUserInput(String userInput) {
+  public String sendUserInput(String userInput) {
     sendMessage(userInput);
     String response = getMessage();
-    if (response == null) {
-      return false;
-    }
-    System.out.println(response);
-    return true;
+    return response;
   }
 
   public String getUserInput(){
@@ -67,7 +63,8 @@ public void sendMessage(String message) {
       return false;
     }
 
-    return sendUserInput(userInput);
+    System.out.println(sendUserInput(userInput));
+    return true;
   }
 
 }
