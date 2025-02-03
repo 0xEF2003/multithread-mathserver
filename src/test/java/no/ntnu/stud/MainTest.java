@@ -46,4 +46,170 @@ public class MainTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testSubtraction() {
+        int port = 1235;
+        boolean multithreading = false;
+        Server server = new Server(port);
+        CountDownLatch latch = new CountDownLatch(2);
+
+        new Thread(() -> {
+            assertDoesNotThrow(() -> {
+                server.run(multithreading);
+                latch.countDown();
+            });
+        }).start();
+
+        new Thread(() -> {
+            assertDoesNotThrow(() -> {
+                Client client;
+                Socket socket = new Socket("localhost", port);
+                client = new Client(socket);
+                System.out.println(client.run("S 6 2"));
+                assertEquals("4.0", client.run("S 6 2"));
+                latch.countDown();
+                client.close();
+            });
+        }).start();
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testMultiplication() {
+        int port = 1236;
+        boolean multithreading = false;
+        Server server = new Server(port);
+        CountDownLatch latch = new CountDownLatch(2);
+
+        new Thread(() -> {
+            assertDoesNotThrow(() -> {
+                server.run(multithreading);
+                latch.countDown();
+            });
+        }).start();
+
+        new Thread(() -> {
+            assertDoesNotThrow(() -> {
+                Client client;
+                Socket socket = new Socket("localhost", port);
+                client = new Client(socket);
+                System.out.println(client.run("M 2 2"));
+                assertEquals("4.0", client.run("M 2 2"));
+                latch.countDown();
+                client.close();
+            });
+        }).start();
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testDivision() {
+        int port = 1237;
+        boolean multithreading = false;
+        Server server = new Server(port);
+        CountDownLatch latch = new CountDownLatch(2);
+
+        new Thread(() -> {
+            assertDoesNotThrow(() -> {
+                server.run(multithreading);
+                latch.countDown();
+            });
+        }).start();
+
+        new Thread(() -> {
+            assertDoesNotThrow(() -> {
+                Client client;
+                Socket socket = new Socket("localhost", port);
+                client = new Client(socket);
+                System.out.println(client.run("D 8 2"));
+                assertEquals("4.0", client.run("D 8 2"));
+                latch.countDown();
+                client.close();
+            });
+        }).start();
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void multiThreadedTest() {
+        int port = 1238;
+        boolean multithreading = true;
+        int amountOfClients = 10;
+        Server server = new Server(port);
+        CountDownLatch latch = new CountDownLatch(2);
+
+        new Thread(() -> {
+            assertDoesNotThrow(() -> {
+                server.run(multithreading);
+                latch.countDown();
+            });
+        }).start();
+
+        for (int i = 0; i < amountOfClients; i++) {
+            new Thread(() -> {
+                assertDoesNotThrow(() -> {
+                    Client client;
+                    Socket socket = new Socket("localhost", port);
+                    client = new Client(socket);
+                    System.out.println(client.run("A 2 2"));
+                    assertEquals("4.0", client.run("A 2 2"));
+                    latch.countDown();
+                    client.close();
+                });
+            }).start();
+        }
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void singleThreadTest() {
+        int port = 1239;
+        boolean multithreading = false;
+        int amountOfClients = 10;
+        Server server = new Server(port);
+        CountDownLatch latch = new CountDownLatch(2);
+
+        new Thread(() -> {
+            assertDoesNotThrow(() -> {
+                server.run(multithreading);
+                latch.countDown();
+            });
+        }).start();
+
+        for (int i = 0; i < amountOfClients; i++) {
+            new Thread(() -> {
+                assertDoesNotThrow(() -> {
+                    Client client;
+                    Socket socket = new Socket("localhost", port);
+                    client = new Client(socket);
+                    System.out.println(client.run("A 2 2"));
+                    assertEquals("4.0", client.run("A 2 2"));
+                    latch.countDown();
+                    client.close();
+                });
+            }).start();
+        }
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
