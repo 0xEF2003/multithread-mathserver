@@ -16,6 +16,10 @@ public class Client {
       }
     }
 
+    public void run(String input) {
+        connectionHandler.sendUserInput(input);
+    }
+
     public static void main(String[] args) {
         try {
           Socket socket = new Socket("localhost", 1234);

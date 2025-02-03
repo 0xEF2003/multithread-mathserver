@@ -30,9 +30,9 @@ public class Server {
          if (multiThreaded) {
            new Thread(() -> {
                 try {
-                handleClient(client);
+                  handleClient(client);
                 } catch (IOException e) {
-                System.out.println(e.getMessage());
+                  System.out.println(e.getMessage());
                 }
            }).start();
          } else {
