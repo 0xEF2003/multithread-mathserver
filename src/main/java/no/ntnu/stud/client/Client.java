@@ -11,16 +11,16 @@ public class Client {
     }
 
     public void start() {
-        while (true) {
-          connectionHandler.handleUserInput();
-        }
+      while (true) {
+        connectionHandler.handleUserInput();
+      }
     }
 
     public static void main(String[] args) {
         try {
-            Socket socket = new Socket("localhost", 1234);
-            Client client = new Client(socket);
-            client.start();
+          Socket socket = new Socket("localhost", 1234);
+          Client client = new Client(socket);
+          client.start();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
