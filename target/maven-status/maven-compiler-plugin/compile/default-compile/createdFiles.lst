@@ -1,2 +1,4 @@
-no/ntnu/stud/Main.class
-no/ntnu/stud/MathHandler$1.class
+no/ntnu/stud/client/ClientConnectionHandler.class
+no/ntnu/stud/client/Client.class
+no/ntnu/stud/Operation.class
+no/ntnu/stud/Server.class

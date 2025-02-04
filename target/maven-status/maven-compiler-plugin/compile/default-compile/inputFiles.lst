@@ -1,7 +1,7 @@
-/home/llorke/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/client/ClientConnectionHandler.java
-/home/llorke/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/client/Client.java
-/home/llorke/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/Main.java
-/home/llorke/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/Request.java
-/home/llorke/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/Server.java
-/home/llorke/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/MathHandler.java
-/home/llorke/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/Operation.java
+/home/e/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/Server.java
+/home/e/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/client/ClientConnectionHandler.java
+/home/e/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/Operation.java
+/home/e/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/client/Client.java
+/home/e/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/Request.java
+/home/e/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/Main.java
+/home/e/git/ekroll/multithread-mathserver/src/main/java/no/ntnu/stud/MathHandler.java
