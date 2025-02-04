@@ -15,41 +15,41 @@ public class Server {
     this.port = port;
   }
 
-  
+
   /**
    * Runs the server.
    *
    * <p>Waits for clients and listens to commands.
    */
   public void run(boolean multiThreaded) {
-     ServerSocket server;
-     
-     try { // Create server socket
-       server = new ServerSocket(this.port);
-       while (running) { // Handle clients
-         Socket client = server.accept();
-         if (multiThreaded) {
-           new Thread(() -> {
-                try {
-                  handleClient(client);
-                } catch (IOException e) {
-                  System.out.println(e.getMessage());
-                }
-           }).start();
-         } else {
-           handleClient(client);
-         }
-       }
-     } catch (IOException e) {
-       System.out.println(e.getMessage());
-     }
+    ServerSocket server;
+
+    try { // Create server socket
+      server = new ServerSocket(this.port);
+      while (running) { // Handle clients
+        Socket client = server.accept();
+        if (multiThreaded) {
+          new Thread(() -> {
+            try {
+              handleClient(client);
+            } catch (IOException e) {
+              System.out.println(e.getMessage());
+            }
+          }).start();
+        } else {
+          handleClient(client);
+        }
+      }
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
 
 
   }
 
-    public void close() {
-        this.running = false;
-    }
+  public void close() {
+    this.running = false;
+  }
 
 
   private void handleClient(Socket client) throws IOException {
@@ -79,8 +79,6 @@ public class Server {
         // Send result back to client
         out.println(message);
       }
-    } finally {
-      client.close();
     }
   }
 }
