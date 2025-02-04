@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.net.Socket;
 
 
+import java.util.concurrent.CountDownLatch;
 import org.junit.jupiter.api.Test;
 
 import no.ntnu.stud.client.Client;
@@ -112,42 +113,23 @@ class MainTest {
   }
 
   @Test
-  void multiThreadedTest() throws InterruptedException {
+  void multiThreadedTest() {
     int port = 1238;
     boolean multithreading = true;
     int amountOfClients = 10;
-    Server server = new Server(port);
+    serverTestWithClients(port, amountOfClients, multithreading);
 
-    new Thread(() -> {
-      assertDoesNotThrow(() -> {
-        server.run(multithreading);
-      });
-    }).start();
-
-    Thread.sleep(10);
-
-    long startTime = System.currentTimeMillis();
-
-    for (int i = 0; i < amountOfClients; i++) {
-      assertDoesNotThrow(() -> {
-        Client client;
-        Socket socket = new Socket("localhost", port);
-        client = new Client(socket);
-        System.out.println(client.run("A 2 2"));
-        assertEquals("4.0", client.run("A 2 2"));
-        client.close();
-      });
-    }
-
-    long endTime = System.currentTimeMillis();
-    System.out.println("Multithreaded test took: " + (endTime - startTime) + " ms");
   }
 
   @Test
-  void singleThreadTest() throws InterruptedException {
+  void singleThreadTest() {
     int port = 1239;
     boolean multithreading = false;
     int amountOfClients = 10;
+    serverTestWithClients(port, amountOfClients, multithreading);
+  }
+
+  void serverTestWithClients(int port, int amountOfClients, boolean multithreading) {
     Server server = new Server(port);
 
     new Thread(() -> {
@@ -156,22 +138,37 @@ class MainTest {
       });
     }).start();
 
-    Thread.sleep(10);
+    // Wait for server to start
+    try {
+      Thread.sleep(10);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
 
+    CountDownLatch latch = new CountDownLatch(1);
     long startTime = System.currentTimeMillis();
 
     for (int i = 0; i < amountOfClients; i++) {
-      assertDoesNotThrow(() -> {
-        Client client;
-        Socket socket = new Socket("localhost", port);
-        client = new Client(socket);
-        System.out.println(client.run("A 2 2"));
-        assertEquals("4.0", client.run("A 2 2"));
-        client.disconnect();
-      });
+      new Thread(() -> {
+        try {
+          latch.await();
+          assertDoesNotThrow(() -> {
+            Client client;
+            Socket socket = new Socket("localhost", port);
+            client = new Client(socket);
+            assertEquals("4.0", client.run("A 2 2"));
+            client.close();
+          });
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }).start();
     }
 
+    latch.countDown();
+
     long endTime = System.currentTimeMillis();
-    System.out.println("Single-threaded test took: " + (endTime - startTime) + " ms");
+    System.out.println(
+        "Multithreading: " + multithreading + " \nTest took: " + (endTime - startTime) + " ms");
   }
 }
