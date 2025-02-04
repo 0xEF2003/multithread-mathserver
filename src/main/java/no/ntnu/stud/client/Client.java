@@ -20,6 +20,10 @@ public class Client {
         return connectionHandler.sendUserInput(input);
     }
 
+    public void disconnect() {
+      connectionHandler.close();
+    }
+
     public void close() {
       connectionHandler.sendUserInput("exit");
       connectionHandler.close();

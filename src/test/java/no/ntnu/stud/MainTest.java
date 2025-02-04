@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 
-import java.io.IOException;
 import java.net.Socket;
 
 import java.util.concurrent.CountDownLatch;
@@ -13,10 +12,10 @@ import org.junit.jupiter.api.Test;
 
 import no.ntnu.stud.client.Client;
 
-public class MainTest {
+class MainTest {
     
     @Test
-    public void testAddition() {
+    void testAddition() {
         int port = 1234;
         boolean multithreading = false;
         Server server = new Server(port);
@@ -48,7 +47,7 @@ public class MainTest {
     }
 
     @Test
-    public void testSubtraction() {
+    void testSubtraction() {
         int port = 1235;
         boolean multithreading = false;
         Server server = new Server(port);
@@ -80,7 +79,7 @@ public class MainTest {
     }
 
     @Test
-    public void testMultiplication() {
+    void testMultiplication() {
         int port = 1236;
         boolean multithreading = false;
         Server server = new Server(port);
@@ -112,7 +111,7 @@ public class MainTest {
     }
 
     @Test
-    public void testDivision() {
+    void testDivision() {
         int port = 1237;
         boolean multithreading = false;
         Server server = new Server(port);
@@ -144,72 +143,62 @@ public class MainTest {
     }
 
     @Test
-    public void multiThreadedTest() {
+    void multiThreadedTest() {
         int port = 1238;
         boolean multithreading = true;
         int amountOfClients = 10;
         Server server = new Server(port);
-        CountDownLatch latch = new CountDownLatch(2);
 
         new Thread(() -> {
             assertDoesNotThrow(() -> {
                 server.run(multithreading);
-                latch.countDown();
             });
         }).start();
 
+        long startTime = System.currentTimeMillis();
+
         for (int i = 0; i < amountOfClients; i++) {
-            new Thread(() -> {
                 assertDoesNotThrow(() -> {
                     Client client;
                     Socket socket = new Socket("localhost", port);
                     client = new Client(socket);
                     System.out.println(client.run("A 2 2"));
                     assertEquals("4.0", client.run("A 2 2"));
-                    latch.countDown();
                     client.close();
                 });
-            }).start();
         }
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Multithreaded test took: " + (endTime - startTime) + " ms");
     }
 
     @Test
-    public void singleThreadTest() {
+    void singleThreadTest() {
         int port = 1239;
         boolean multithreading = false;
         int amountOfClients = 10;
         Server server = new Server(port);
-        CountDownLatch latch = new CountDownLatch(2);
 
         new Thread(() -> {
             assertDoesNotThrow(() -> {
                 server.run(multithreading);
-                latch.countDown();
             });
         }).start();
 
+        long startTime = System.currentTimeMillis();
+
         for (int i = 0; i < amountOfClients; i++) {
-            new Thread(() -> {
                 assertDoesNotThrow(() -> {
                     Client client;
                     Socket socket = new Socket("localhost", port);
                     client = new Client(socket);
                     System.out.println(client.run("A 2 2"));
                     assertEquals("4.0", client.run("A 2 2"));
-                    latch.countDown();
-                    client.close();
+                    client.disconnect();
                 });
-            }).start();
         }
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Single-threaded test took: " + (endTime - startTime) + " ms");
     }
 }

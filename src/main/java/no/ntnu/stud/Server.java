@@ -53,31 +53,35 @@ public class Server {
 
 
   private void handleClient(Socket client) throws IOException {
-    PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-    BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-    String line;
-    while((line = in.readLine()) != null && !line.equals("exit")) {
-      Request request = null;
-      double result = 0;
-      String message = "";
+    try (PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()))) {
+      String line;
+      while ((line = in.readLine()) != null && !line.equals("exit")) {
+        Request request = null;
+        double result = 0;
+        String message = "";
 
-      // Parse request
-      try { request = new Request(line); }
-      catch (Exception e) { message = "Bad request"; }
+        // Parse request
+        try {
+          request = new Request(line);
+        } catch (Exception e) {
+          message = "Bad request";
+        }
 
-      try { // Do math operation
-        result = MathHandler.perform(request);
-        message = String.valueOf(result);
+        try { // Do math operation
+          result = MathHandler.perform(request);
+          message = String.valueOf(result);
+        } catch (Exception e) {
+          message = "Bad math";
+          System.out.println(e.getMessage());
+        }
+
+        // Send result back to client
+        out.println(message);
       }
-      catch (Exception e) {
-        message = "Bad math";
-        System.out.println(e.getMessage());
-      }
-
-      // Send result back to client
-      out.println(message);
+    } finally {
+      client.close();
     }
-    close();
   }
 }
 
