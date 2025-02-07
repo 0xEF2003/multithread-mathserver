@@ -140,32 +140,33 @@ class MainTest {
 
     // Wait for server to start
     try {
-      Thread.sleep(10);
+      Thread.sleep(200);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
 
-    CountDownLatch latch = new CountDownLatch(1);
+    CountDownLatch latch = new CountDownLatch(amountOfClients-1);
     long startTime = System.currentTimeMillis();
 
     for (int i = 0; i < amountOfClients; i++) {
       new Thread(() -> {
-        try {
-          latch.await();
           assertDoesNotThrow(() -> {
             Client client;
             Socket socket = new Socket("localhost", port);
             client = new Client(socket);
             assertEquals("4.0", client.run("A 2 2"));
             client.close();
+            latch.countDown();
           });
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
       }).start();
     }
 
-    latch.countDown();
+    try { // wait for threads to finish
+        latch.await();
+    }
+    catch (InterruptedException e) {
+        e.printStackTrace();
+    }
 
     long endTime = System.currentTimeMillis();
     System.out.println(

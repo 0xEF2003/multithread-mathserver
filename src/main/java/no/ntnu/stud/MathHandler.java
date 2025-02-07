@@ -9,6 +9,13 @@ public class MathHandler {
             case DIVISION       -> { result = request.getOne() / request.getOther(); }
             case MULTIPLICATION -> { result = request.getOne() * request.getOther(); }
         }
+
+        try { // Simulate heavy operation
+          Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+          ex.printStackTrace();
+        }
+
         return result;
     }
 }
