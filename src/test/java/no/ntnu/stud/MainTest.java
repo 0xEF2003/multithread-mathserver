@@ -33,7 +33,6 @@ class MainTest {
       Client client;
       Socket socket = new Socket("localhost", port);
       client = new Client(socket);
-      System.out.println(client.run("A 2 2"));
       assertEquals("4.0", client.run("A 2 2"));
       client.close();
     });
@@ -57,7 +56,6 @@ class MainTest {
       Client client;
       Socket socket = new Socket("localhost", port);
       client = new Client(socket);
-      System.out.println(client.run("S 6 2"));
       assertEquals("4.0", client.run("S 6 2"));
       client.close();
     });
@@ -81,7 +79,6 @@ class MainTest {
       Client client;
       Socket socket = new Socket("localhost", port);
       client = new Client(socket);
-      System.out.println(client.run("M 2 2"));
       assertEquals("4.0", client.run("M 2 2"));
       client.close();
     });
@@ -106,7 +103,6 @@ class MainTest {
       Client client;
       Socket socket = new Socket("localhost", port);
       client = new Client(socket);
-      System.out.println(client.run("D 8 2"));
       assertEquals("4.0", client.run("D 8 2"));
       client.close();
     });
@@ -116,7 +112,7 @@ class MainTest {
   void multiThreadedTest() {
     int port = 1238;
     boolean multithreading = true;
-    int amountOfClients = 10;
+    int amountOfClients = 40;
     serverTestWithClients(port, amountOfClients, multithreading);
 
   }
@@ -125,7 +121,7 @@ class MainTest {
   void singleThreadTest() {
     int port = 1239;
     boolean multithreading = false;
-    int amountOfClients = 10;
+    int amountOfClients = 40;
     serverTestWithClients(port, amountOfClients, multithreading);
   }
 
